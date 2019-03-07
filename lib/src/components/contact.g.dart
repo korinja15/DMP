@@ -12,7 +12,9 @@ Contact _$ContactFromJson(Map<String, dynamic> json) {
       lastName: json['last_name'] as String,
       phone: json['phone'] as int,
       image: json['image'] as String,
-      blocked: json['blocked'] as bool);
+      blocked: json['blocked'] as bool,
+      procedure: (json['procedure'] as List)?.map((e) => e as String)?.toList(),
+      state: json['state'] as int);
 }
 
 Map<String, dynamic> _$ContactToJson(Contact instance) => <String, dynamic>{
@@ -20,5 +22,7 @@ Map<String, dynamic> _$ContactToJson(Contact instance) => <String, dynamic>{
       'last_name': instance.lastName,
       'phone': instance.phone,
       'image': instance.image,
-      'blocked': instance.blocked
+      'blocked': instance.blocked,
+      'procedure': instance.procedure,
+      'state': instance.state
     };

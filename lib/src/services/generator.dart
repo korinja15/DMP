@@ -8,14 +8,21 @@ import 'messages_service.dart';
 
 import 'package:Talkvee/src/script/contacts/female.dart' as female;
 import 'package:Talkvee/src/script/contacts/male.dart' as male;
+import 'package:Talkvee/src/script/procedure.dart';
 
-class Generator {
-  Future<int> createContact() async {
+class ContactGenerator {
+  Future<Contact> createContact() async {
     var service =
         ContactsService(await DatabaseTools(name: "contacts").getDB());
     service.open();
 
     var rand = Random();
+
+    String imagepom = "";
+    for (var i = 1; i <= 2; i++) {
+      String number = rand.nextInt(10).toString();
+      imagepom = "$imagepom$number";
+    }
 
     String phone = "";
     for (var i = 1; i <= 9; i++) {
@@ -23,16 +30,11 @@ class Generator {
       phone = "$phone$number";
     }
 
-    String imagepom = "";
-    for (var i = 1; i <= 2; i++) {
-      String number = rand.nextInt(10).toString();
-      imagepom = "$imagepom$number";
-    }
     int image = int.parse(imagepom);
-
     bool isMale = rand.nextBool();
     List<String> fName;
     List<String> lName;
+
     String gender;
     if (isMale) {
       fName = male.firstName;
@@ -50,26 +52,29 @@ class Generator {
       image: "https://randomuser.me/api/portraits/$gender/$image.jpg",
       phone: int.parse(phone),
       blocked: false,
+      procedure: procedure[rand.nextInt(procedure.length)],
+      state: 0,
     );
 
     //service.insertContact(data);
 
+    //testing
     print(data.firstName);
     print(data.lastName);
     print(data.phone);
     print(data.image);
 
-    return data.phone;
+    return data;
   }
 
-  Future<void> createMessage(int phone) async {
+  Future<void> createMessage(Contact contact) async {
     var service =
         MessagesService(await DatabaseTools(name: "messages").getDB());
     service.open();
 
     Message data = Message(
       message: "generate",
-      phone: phone,
+      phone: contact.phone,
       date: DateTime.now(),
       byuser: false,
     );
@@ -78,7 +83,6 @@ class Generator {
   }
 
   Future<void> generate() async {
-    int phone = await createContact();
-    createMessage(phone);
+    createMessage(await createContact());
   }
 }

@@ -23,7 +23,7 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Generator().generate();
+    ContactGenerator().generate();
     return ScopedModel<MainModel>(
       model: MainModel(),
       child: Scaffold(
