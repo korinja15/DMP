@@ -47,13 +47,13 @@ final List<String> meetingAsk = [
 final List<String> passwordAsk = [
   "Můžeš mi dát tvoje heslo?",
   "Můžeš mi poslat tvoje heslo?",
-  "Potřebuju tvoje heslo.",
+  "Potřebuju tvoje heslo!",
 ];
 
 final List<String> phoneAsk = [
   "Můžeš mi dát tvoje telefonní číslo?",
   "Můžeš mi poslat tvoje číslo?",
-  "Potřebuju tvoje číslo.",
+  "Potřebuju tvoje číslo!",
 ];
 
 final List<String> sexAsk = [
@@ -64,4 +64,22 @@ final List<String> sexAsk = [
 final List<String> picturesAsk = [
   "Nemáš nějaký sexy fotky?",
   "Pošleš mi nějaký nahý fotky?",
+];
+
+final List<String> thanks = [
+  "Díky",
+  "Děkuju",
+  "Děkuju moc",
+  "Moc děkuju",
+  "Výborný",
+  "Výborně",
+];
+
+final List<String> leaving = [
+  "Musím jít, promiň",
+  "Teď nemůžu",
+  "Promiň, teď nemůžu psát",
+  "Musím jít",
+  "Nemám čas",
+  "Napíšu později",
 ];

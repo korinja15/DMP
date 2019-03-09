@@ -23,7 +23,20 @@ class ContactsService extends DatabaseService {
 
   Future<ObjectId> insertContact(Contact data) => db.insert(data.toJson());
 
-  Future<void> updateContact(Contact data) {
+  Future<void> updateContactPhone(Contact data) {
     db.update({"phone": data.phone}, data.toJson());
+  }
+
+  Future<void> updateContactState(Contact data) {
+    Contact replace = Contact(
+      phone: data.phone,
+      blocked: data.blocked,
+      firstName: data.firstName,
+      lastName: data.lastName,
+      image: data.image,
+      procedure: data.procedure,
+      state: data.state + 1,
+    );
+    db.update({"phone": data.phone}, replace.toJson());
   }
 }

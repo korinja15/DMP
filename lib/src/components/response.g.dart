@@ -8,10 +8,8 @@ part of 'response.dart';
 
 Response _$ResponseFromJson(Map<String, dynamic> json) {
   return Response(
-      text: json['text'] as String,
-      entities: (json['entities'] as List)
-          ?.map((e) => e as Map<String, dynamic>)
-          ?.toList(),
+      text: json['_text'] as String,
+      entities: json['entities'],
       msg_id: json['msg_id'] as String);
 }
 

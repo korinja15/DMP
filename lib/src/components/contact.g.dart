@@ -13,7 +13,7 @@ Contact _$ContactFromJson(Map<String, dynamic> json) {
       phone: json['phone'] as int,
       image: json['image'] as String,
       blocked: json['blocked'] as bool,
-      procedure: (json['procedure'] as List)?.map((e) => e as String)?.toList(),
+      procedure: json['procedure'] as int,
       state: json['state'] as int);
 }
 

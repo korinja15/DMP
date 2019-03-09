@@ -10,7 +10,7 @@ import 'package:Talkvee/src/script/contacts/female.dart' as female;
 import 'package:Talkvee/src/script/contacts/male.dart' as male;
 import 'package:Talkvee/src/script/procedure.dart';
 
-class ContactGenerator {
+class Generator {
   Future<Contact> createContact() async {
     var service =
         ContactsService(await DatabaseTools(name: "contacts").getDB());
@@ -52,17 +52,15 @@ class ContactGenerator {
       image: "https://randomuser.me/api/portraits/$gender/$image.jpg",
       phone: int.parse(phone),
       blocked: false,
-      procedure: procedure[rand.nextInt(procedure.length)],
-      state: 0,
+      procedure: rand.nextInt(Procedure().count),
+      state: 1,
     );
 
-    //service.insertContact(data);
+    service.insertContact(data);
+    service.close();
 
     //testing
-    print(data.firstName);
-    print(data.lastName);
-    print(data.phone);
-    print(data.image);
+    print(data.fullName);
 
     return data;
   }
@@ -73,13 +71,14 @@ class ContactGenerator {
     service.open();
 
     Message data = Message(
-      message: "generate",
+      message: Procedure().procedure(contact.procedure, 0, null),
       phone: contact.phone,
       date: DateTime.now(),
       byuser: false,
     );
 
-    //service.insertMessage(data);
+    service.insertMessage(data);
+    service.close();
   }
 
   Future<void> generate() async {

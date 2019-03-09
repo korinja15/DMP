@@ -5,7 +5,7 @@ part 'response.g.dart';
 @JsonSerializable()
 class Response {
   final String text;
-  final List<Map> entities;
+  final dynamic entities;
   final String msg_id;
 
   const Response({

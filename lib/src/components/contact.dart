@@ -9,7 +9,7 @@ class Contact {
   final int phone;
   final String image;
   final bool blocked;
-  final List<String> procedure;
+  final int procedure;
   final int state;
 
   String get fullName => "$firstName $lastName";

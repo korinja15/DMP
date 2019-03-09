@@ -4,9 +4,14 @@ import 'package:Talkvee/src/services/contacts_service.dart';
 import 'package:Talkvee/src/services/database_path.dart';
 import 'package:Talkvee/src/services/messages_service.dart';
 import 'package:Talkvee/src/view/home/components/chatlistview_data.dart';
+import 'package:Talkvee/src/services/generator.dart';
 
 class ChatListViewTools {
   const ChatListViewTools();
+
+  Future<void> createData() async {
+    await Generator().generate();
+  }
 
   Future<List<ChatListViewData>> getData() async {
     final contactsService =
@@ -17,19 +22,10 @@ class ChatListViewTools {
         MessagesService(await DatabaseTools(name: "messages").getDB());
     await messagesService.open();
 
-    /*contactsService.insertContact(Contact(
-      firstName: "Martin",
-      lastName: "Šafařík",
-      blocked: false,
-      image: "http://i.pravatar.cc/150?img=2",
-      phone: 1234,
-    ));*/
-    /*messagesService.insertMessage(Message(
-      phone: 2453,
-      byuser: false,
-      date: DateTime.now(),
-      message: "Zpráva",
-    ));*/
+    /*contactsService.remove();
+    messagesService.remove();*/
+
+    //Generator().generate();
 
     final contacts = await contactsService.getContacts();
 
