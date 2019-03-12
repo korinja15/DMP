@@ -9,6 +9,8 @@ class Contact {
   final int phone;
   final String image;
   final bool blocked;
+  final int procedure;
+  final int state;
 
   String get fullName => "$firstName $lastName";
 
@@ -18,6 +20,8 @@ class Contact {
     this.phone,
     this.image,
     this.blocked,
+    this.procedure,
+    this.state,
   });
 
   factory Contact.fromJson(Map<String, dynamic> json) =>

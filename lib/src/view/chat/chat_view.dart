@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:Talkvee/src/components/message.dart';
 import 'package:Talkvee/src/components/response.dart';
+import 'package:Talkvee/src/script/procedure.dart';
 import 'package:Talkvee/src/services/contacts_service.dart';
 import 'package:Talkvee/src/services/database_path.dart';
+import 'package:Talkvee/src/services/generator.dart';
 import 'package:Talkvee/src/services/messages_service.dart';
 import 'package:Talkvee/src/view/chat/components/message_widget.dart';
 import 'package:Talkvee/src/view/home/components/chatlistview_tools.dart';
@@ -26,13 +28,25 @@ class _ChatState extends State<Chat> {
 
   final TextEditingController _messageController = TextEditingController();
 
-  Future<List<Message>> _getChats() async {
+  List<Widget> chats;
+  Contact contact;
+
+  Future<bool> _getChats() async {
     final service =
         MessagesService(await DatabaseTools(name: "messages").getDB());
     service.open();
     var data = await service.getMessagesByPhone(phone);
     service.close();
-    return data.reversed.toList();
+    List<Widget> result = List<Widget>();
+    data.reversed.forEach((x) => result.add(MessageWidget(
+          message: x.message,
+          byuser: x.byuser,
+          theme: Theme.of(context).brightness,
+        )));
+    setState(() {
+      chats = result;
+    });
+    return true;
   }
 
   Future<Contact> _getContact() async {
@@ -41,29 +55,51 @@ class _ChatState extends State<Chat> {
     service.open();
     var data = await service.getContactByPhone(phone);
     service.close();
+    setState(() {
+      contact = data;
+    });
     return data;
   }
 
   void _send(String text) async {
     final service =
         MessagesService(await DatabaseTools(name: "messages").getDB());
+
     service.open();
+
     await service.insertMessage(Message(
       date: DateTime.now(),
-      phone: phone,
+      phone: contact.phone,
       byuser: true,
       message: text,
     ));
-    service.close();
+
+    Response apiresponse;
     DateFormat format = DateFormat("yyyyMMdd");
     var date = format.format(DateTime.now());
-    http.get(
+    await http.get(
       'https://api.wit.ai/message?v=$date&q=$text',
       headers: {"Authorization": "Bearer RHNFNF5OJ7RQYBCHLHLINLQ2FEXFLB5U"},
     ).then((contents) {
-      var data = Response.fromJson(json.decode(contents.body));
-      print(data.entities);
+      apiresponse = Response.fromJson(json.decode(contents.body));
+      print(apiresponse.entities);
     });
+
+    await service.insertMessage(Message(
+      date: DateTime.now(),
+      phone: contact.phone,
+      byuser: false,
+      message: Procedure().procedure(
+          contact.procedure, contact.state, apiresponse.entities.toString()),
+    ));
+    service.close();
+
+    final contactService =
+        ContactsService(await DatabaseTools(name: "contacts").getDB());
+    contactService.open();
+    contactService.updateContactState(contact);
+    contactService.close();
+    _getChats();
   }
 
   @override
@@ -88,7 +124,7 @@ class _ChatState extends State<Chat> {
       body: Column(
         children: <Widget>[
           Flexible(
-              child: FutureBuilder<List<Message>>(
+              child: FutureBuilder<void>(
             future: _getChats(),
             builder: (context, snapshot) {
               if (!snapshot.hasData) {
@@ -99,14 +135,10 @@ class _ChatState extends State<Chat> {
               return ListView.builder(
                 reverse: true,
                 itemBuilder: (context, i) {
-                  final data = snapshot.data[i];
-                  return MessageWidget(
-                    message: data.message,
-                    byuser: data.byuser,
-                    theme: Theme.of(context).brightness,
-                  );
+                  final data = chats[i];
+                  return data;
                 },
-                itemCount: snapshot.data.length,
+                itemCount: chats.length,
               );
             },
           )),

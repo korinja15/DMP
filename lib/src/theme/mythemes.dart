@@ -8,7 +8,7 @@ class MyThemes {
   final ThemeData darkTheme = ThemeData(
     primaryColor: _darkColorBackground,
     primaryColorDark: _darkColorBackground,
-    accentColor: Colors.red,
+    accentColor: _lightColorBackground,
     backgroundColor: _darkColorBackground,
     scaffoldBackgroundColor: _darkColorBackground,
     brightness: Brightness.dark,
@@ -18,7 +18,7 @@ class MyThemes {
   final ThemeData lightTheme = ThemeData(
     primaryColor: _lightColorBackground,
     primaryColorDark: _lightColorBackground,
-    accentColor: Colors.red,
+    accentColor: _darkColorBackground,
     backgroundColor: _lightColorBackground,
     scaffoldBackgroundColor: _lightColorBackground,
     brightness: Brightness.light,

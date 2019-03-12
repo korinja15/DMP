@@ -4,67 +4,83 @@ import 'package:Talkvee/src/view/home/components/chatlistview_tools.dart';
 import 'package:Talkvee/src/view/home/components/popupmenu_tools.dart';
 import 'package:Talkvee/src/view/settings/auth_view.dart';
 import 'package:Talkvee/src/view/settings/settings_view.dart';
+import 'package:Talkvee/src/view/setup/setup_view.dart';
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:Talkvee/src/view/home/components/chatlistview_widget.dart';
-import 'package:Talkvee/src/view/home/scopedmodel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
+  @override
+  HomeViewState createState() {
+    return new HomeViewState();
+  }
+}
+
+class HomeViewState extends State<HomeView> {
   final ChatListViewTools chatListViewTools = ChatListViewTools();
 
   final PopupMenuTools popupMenuTools = PopupMenuTools();
 
   void _openSettings(BuildContext context) async {
-    //if (await AuthView().auth()) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => SettingsMenu()));
-    //}
+        .push(MaterialPageRoute(builder: (context) => AuthView()));
+  }
+
+  void initialStart() async {
+    final prefs = await SharedPreferences.getInstance();
+    bool first = prefs.getBool("first");
+    if (first == null || first) {
+      print("initial");
+      prefs.setBool("first", false);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => SetupView()));
+      for (var i = 0; i < 6; i++) {
+        await Generator().generate();
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    Generator().generate();
-    return ScopedModel<MainModel>(
-      model: MainModel(),
-      child: Scaffold(
-        appBar: AppBar(
-          title: GestureDetector(
-            onLongPressUp: () {
-              _openSettings(context);
-            },
-            child: Text(
-              "Zprávy",
-            ),
-          ),
-          centerTitle: true,
-          elevation: 0,
-          actions: <Widget>[
-            PopupMenuButton(
-              icon: Icon(Icons.more_vert),
-              itemBuilder: (context) => popupMenuTools.menuItems,
-              onSelected: (x) => popupMenuTools.selectPage(x, context),
-            )
-          ],
-        ),
-        body: FutureBuilder<List<ChatListViewData>>(
-          future: chatListViewTools.getData(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-            return ListView.builder(
-              itemBuilder: (context, i) {
-                final data = snapshot.data[i];
-                return ChatListViewWidget(
-                  data: data,
-                );
-              },
-              itemCount: snapshot.data.length,
-            );
+    initialStart();
+    return Scaffold(
+      appBar: AppBar(
+        title: GestureDetector(
+          onLongPress: () {
+            _openSettings(context);
           },
+          child: Text(
+            "Zprávy",
+          ),
         ),
+        centerTitle: true,
+        elevation: 0,
+        actions: <Widget>[
+          PopupMenuButton(
+            icon: Icon(Icons.more_vert),
+            itemBuilder: (context) => popupMenuTools.menuItems,
+            onSelected: (x) => popupMenuTools.selectPage(x, context),
+          )
+        ],
+      ),
+      body: FutureBuilder<List<ChatListViewData>>(
+        future: chatListViewTools.getData(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView.builder(
+            itemBuilder: (context, i) {
+              final data = snapshot.data[i];
+              return ChatListViewWidget(
+                data: data,
+              );
+            },
+            itemCount: snapshot.data.length,
+          );
+        },
       ),
     );
   }
