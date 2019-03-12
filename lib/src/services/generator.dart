@@ -82,6 +82,6 @@ class Generator {
   }
 
   Future<void> generate() async {
-    createMessage(await createContact());
+    await createMessage(await createContact());
   }
 }

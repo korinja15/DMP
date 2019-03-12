@@ -1,3 +1,4 @@
+import 'package:Talkvee/src/services/scrollbehavior.dart';
 import 'package:Talkvee/src/theme/mythemes.dart';
 import 'package:flutter/material.dart';
 import 'package:Talkvee/src/view/home/home.dart';
@@ -6,13 +7,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:dynamic_theme/dynamic_theme.dart';
 
 void main() async {
-  final sharedPrefs = await SharedPreferences.getInstance();
+  final prefs = await SharedPreferences.getInstance();
 
   bool _isDark() {
-    final dark = sharedPrefs.getBool("darkmode");
+    final dark = prefs.getBool("darkmode");
     if (dark == null) {
-      sharedPrefs.setBool("darkmode", false);
-      return sharedPrefs.getBool("darkmode");
+      prefs.setBool("darkmode", true);
+
+      return prefs.getBool("darkmode");
     }
     return dark;
   }
@@ -43,6 +45,12 @@ class MyApp extends StatelessWidget {
         return MaterialApp(
           title: 'Talkvee',
           theme: theme,
+          builder: (context, child) {
+            return ScrollConfiguration(
+              behavior: CustomScrollBehavior(),
+              child: child,
+            );
+          },
           home: HomeView(),
         );
       },

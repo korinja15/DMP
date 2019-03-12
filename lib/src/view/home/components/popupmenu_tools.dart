@@ -7,15 +7,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 class PopupMenuTools {
   final List<PopupMenuItem> menuItems = [
     PopupMenuItem(
-      child: Text("Světlý režim"),
+      child: Text("Světlý/tmavý vzhled"),
       enabled: true,
       value: 0,
     ),
-    PopupMenuItem(
+    /*PopupMenuItem(
       child: Text("Nápověda"),
       enabled: true,
       value: 1,
-    ),
+    ),*/
   ];
 
   void _changeTheme(BuildContext context) async {
@@ -33,13 +33,6 @@ class PopupMenuTools {
     switch (value) {
       case 0:
         _changeTheme(context);
-        break;
-      case 1:
-        /*if (await AuthView().auth()) {
-          page = SettingsMenu();
-        } else {
-          page = null;
-        }*/
         break;
       default:
     }

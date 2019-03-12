@@ -25,8 +25,6 @@ class ChatListViewTools {
     /*contactsService.remove();
     messagesService.remove();*/
 
-    //Generator().generate();
-
     final contacts = await contactsService.getContacts();
 
     final data =

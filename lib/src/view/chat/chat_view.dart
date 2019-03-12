@@ -89,8 +89,8 @@ class _ChatState extends State<Chat> {
       date: DateTime.now(),
       phone: contact.phone,
       byuser: false,
-      message: Procedure()
-          .procedure1(contact.state, apiresponse.entities.toString()),
+      message: Procedure().procedure(
+          contact.procedure, contact.state, apiresponse.entities.toString()),
     ));
     service.close();
 

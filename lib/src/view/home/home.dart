@@ -1,42 +1,52 @@
+import 'package:Talkvee/src/services/generator.dart';
 import 'package:Talkvee/src/view/home/components/chatlistview_data.dart';
 import 'package:Talkvee/src/view/home/components/chatlistview_tools.dart';
 import 'package:Talkvee/src/view/home/components/popupmenu_tools.dart';
 import 'package:Talkvee/src/view/settings/auth_view.dart';
 import 'package:Talkvee/src/view/settings/settings_view.dart';
+import 'package:Talkvee/src/view/setup/setup_view.dart';
 import 'package:flutter/material.dart';
 import 'package:Talkvee/src/view/home/components/chatlistview_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
+  @override
+  HomeViewState createState() {
+    return new HomeViewState();
+  }
+}
+
+class HomeViewState extends State<HomeView> {
   final ChatListViewTools chatListViewTools = ChatListViewTools();
 
   final PopupMenuTools popupMenuTools = PopupMenuTools();
 
   void _openSettings(BuildContext context) async {
-    //if (await AuthView().auth()) {
     Navigator.of(context)
-        .push(MaterialPageRoute(builder: (context) => SettingsMenu()));
-    //}
+        .push(MaterialPageRoute(builder: (context) => AuthView()));
   }
 
-  void getNewChats() async {
+  void initialStart() async {
     final prefs = await SharedPreferences.getInstance();
-    bool init = prefs.getBool("init");
-    if (init == null) {
-      prefs.setBool("init", false);
-      for (var i = 0; i < 5; i++) {
-        chatListViewTools.getData();
+    bool first = prefs.getBool("first");
+    if (first == null || first) {
+      print("initial");
+      prefs.setBool("first", false);
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => SetupView()));
+      for (var i = 0; i < 6; i++) {
+        await Generator().generate();
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    getNewChats();
+    initialStart();
     return Scaffold(
       appBar: AppBar(
         title: GestureDetector(
-          onLongPressUp: () {
+          onLongPress: () {
             _openSettings(context);
           },
           child: Text(

@@ -1,21 +1,18 @@
-import 'package:Talkvee/src/view/settings/settings_view.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pin_put/pin_put.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthView extends StatefulWidget {
+class SetupAuth extends StatefulWidget {
   @override
-  _AuthViewState createState() => _AuthViewState();
+  _SetupAuthState createState() => _SetupAuthState();
 }
 
-class _AuthViewState extends State<AuthView> {
-  void _checkPin(String pin) async {
+class _SetupAuthState extends State<SetupAuth> {
+  void _setPin(String pin) async {
     final prefs = await SharedPreferences.getInstance();
-    String realPin = prefs.getString("PIN");
-    if (realPin == pin) {
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => SettingsMenu()));
-    }
+    prefs.setString("PIN", pin);
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   @override
@@ -31,8 +28,8 @@ class _AuthViewState extends State<AuthView> {
                   child: PinPut(
                     autoFocus: true,
                     fieldsCount: 4,
-                    onSubmit: (String x) => _checkPin(x),
-                    isTextObscure: true,
+                    onSubmit: (String x) => _setPin(x),
+                    isTextObscure: false,
                     actionButtonsEnabled: true,
                     clearButtonIcon: Icon(
                       Icons.close,

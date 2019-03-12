@@ -20,7 +20,7 @@ final rand = Random();
 class Procedure {
   final int script = 0;
 
-  final int count = 3;
+  final int count = 6;
 
   void report(String title, String description) async {
     final service =
@@ -36,28 +36,28 @@ class Procedure {
     }*/
     switch (procedure) {
       case 0:
-        return procedure0(state, entities);
+        return _procedure0(state, entities);
         break;
       case 1:
-        return procedure1(state, entities);
+        return _procedure1(state, entities);
         break;
       case 2:
-        return procedure2(state, entities);
+        return _procedure2(state, entities);
         break;
       case 3:
-        return procedure3(state, entities);
+        return _procedure3(state, entities);
         break;
       case 4:
-        return procedure4(state, entities);
+        return _procedure4(state, entities);
         break;
       case 5:
-        return procedure5(state, entities);
+        return _procedure5(state, entities);
         break;
       default:
     }
   }
 
-  String procedure0(int state, String entities) {
+  String _procedure0(int state, String entities) {
     switch (state) {
       case 0:
         return greeting[rand.nextInt(greeting.length)];
@@ -85,7 +85,7 @@ class Procedure {
               ". " +
               meetingAsk[rand.nextInt(meetingAsk.length)];
         }
-        return procedure0(state--, entities);
+        return _procedure0(state--, entities);
         break;
       case 3:
         if (entities.indexOf("yes") != -1) {
@@ -94,14 +94,14 @@ class Procedure {
         } else if (entities.indexOf("no") != -1) {
           return "Škoda";
         }
-        return procedure0(state--, entities);
+        return _procedure0(state--, entities);
         break;
       default:
         return "Promiň, teď nemůžu psát";
     }
   }
 
-  String procedure1(int state, String entities) {
+  String _procedure1(int state, String entities) {
     switch (state) {
       case 0:
         return greeting[rand.nextInt(greeting.length)];
@@ -126,7 +126,7 @@ class Procedure {
             entities.indexOf("mood") != -1) {
           return phoneAsk[rand.nextInt(phoneAsk.length)];
         }
-        return procedure1(state--, entities);
+        return _procedure1(state--, entities);
         break;
       case 3:
         if (entities.indexOf("yes") != -1 ||
@@ -136,14 +136,14 @@ class Procedure {
         } else if (entities.indexOf("no") != -1) {
           return "Škoda";
         }
-        return procedure1(state--, entities);
+        return _procedure1(state--, entities);
         break;
       default:
         return "Promiň, teď nemůžu psát";
     }
   }
 
-  String procedure2(int state, String entities) {
+  String _procedure2(int state, String entities) {
     switch (state) {
       case 0:
         return greeting[rand.nextInt(greeting.length)];
@@ -166,7 +166,7 @@ class Procedure {
               ". " +
               activityAsk[rand.nextInt(activityAsk.length)];
         }
-        return procedure2(state--, entities);
+        return _procedure2(state--, entities);
         break;
       case 3:
         if (entities.indexOf("activity-ask") != -1) {
@@ -174,7 +174,7 @@ class Procedure {
         } else if (entities.indexOf("activity") != -1) {
           return "Dobře";
         }
-        return procedure2(state--, entities);
+        return _procedure2(state--, entities);
         break;
       case 4:
         return leaving[rand.nextInt(leaving.length)];
@@ -184,7 +184,7 @@ class Procedure {
     }
   }
 
-  String procedure3(int state, String entities) {
+  String _procedure3(int state, String entities) {
     switch (state) {
       case 0:
         return greetingFormal[rand.nextInt(greetingFormal.length)];
@@ -200,14 +200,14 @@ class Procedure {
         } else if (entities.indexOf("no") != -1) {
           return "Dobře";
         }
-        return procedure3(state--, entities);
+        return _procedure3(state--, entities);
         break;
       default:
         return "Promiň, teď nemůžu psát";
     }
   }
 
-  String procedure4(int state, String entities) {
+  String _procedure4(int state, String entities) {
     switch (state) {
       case 0:
         return greeting[rand.nextInt(greeting.length)];
@@ -230,7 +230,7 @@ class Procedure {
               ". " +
               activityAsk[rand.nextInt(activityAsk.length)];
         }
-        return procedure4(state--, entities);
+        return _procedure4(state--, entities);
         break;
       case 3:
         if (entities.indexOf("activity-ask") != -1) {
@@ -238,7 +238,7 @@ class Procedure {
         } else if (entities.indexOf("activity") != -1) {
           return "Dobře";
         }
-        return procedure4(state--, entities);
+        return _procedure4(state--, entities);
         break;
       case 4:
         return leaving[rand.nextInt(leaving.length)];
@@ -248,7 +248,7 @@ class Procedure {
     }
   }
 
-  String procedure5(int state, String entities) {
+  String _procedure5(int state, String entities) {
     switch (state) {
       case 0:
         return greeting[rand.nextInt(greeting.length)];
@@ -270,7 +270,7 @@ class Procedure {
         } else if (entities.indexOf("no") != -1) {
           return "Dobře";
         }
-        return procedure5(state--, entities);
+        return _procedure5(state--, entities);
         break;
       default:
         return "Promiň, teď nemůžu psát";
